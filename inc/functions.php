@@ -1,18 +1,17 @@
 <?php
 // require() and parse tags in a skin component
 function require_skin($x){
-  global $skin,$imageURL,$prevPage,$nextPage;
-  
   ob_start();
-  require('skins/' . $skin . '/' . $x);
+  require('skins/' . $GLOBALS['skin'] . '/' . $x);
   $y = ob_get_contents();
   ob_end_clean();
   
-  if (isset($skin)){ $y = str_replace('{{skinURL}}', 'skins/' . $skin, $y); } else {
+  if (isset($GLOBALS['skin'])){ $y = str_replace('{{skinURL}}', 'skins/' . $GLOBALS['skin'], $y); } else {
     str_replace('{{skinURL}}', '', $y); }
-  if (isset($imageURL)){ $y = str_replace('{{imageURL}}', $imageURL, $y); }
-  if (isset($prevPage)){ $y = str_replace('{{prevPageURL}}', 'read?page=' . $prevPage, $y); }
-  if (isset($nextPage)){ $y = str_replace('{{nextPageURL}}', 'read?page=' . $nextPage, $y); }
+  if (isset($GLOBALS['imageURL'])){ $y = str_replace('{{imageURL}}', $GLOBALS['imageURL'], $y); }
+  if (isset($GLOBALS['page'])){ $y = str_replace('{{page}}', $GLOBALS['page'], $y); }
+  if (isset($GLOBALS['prevPage'])){ $y = str_replace('{{prevPageURL}}', 'read?page=' . $GLOBALS['prevPage'], $y); }
+  if (isset($GLOBALS['nextPage'])){ $y = str_replace('{{nextPageURL}}', 'read?page=' . $GLOBALS['nextPage'], $y); }
   
   echo $y;
 }

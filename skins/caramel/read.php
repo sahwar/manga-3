@@ -1,4 +1,5 @@
 <div class="manga-image">
+  Chapter {{chapter}} Page {{page}}
   <a href="{{nextPageURL}}">
     <img src="{{imageURL}}" class="manga-image" />
   </a>
