@@ -83,8 +83,14 @@ require_once('inc/functions.php');
     <link rel="prefetch" href="<?php echo $nextPageURL; ?>">
   </head>
 <body>
-  <?php require_skin('header.php'); ?>
-  <?php require_skin('read.php'); ?>
-  <?php require_skin('footer.php'); ?>
+  <?php
+  require_skin('header.php');
+  if ($page == 'comments' && $allowComments == true){
+    require_skin('comments.php');
+  } else {
+    require_skin('read.php');
+  }
+  require_skin('footer.php');
+  ?>
 </body>
 </html>
