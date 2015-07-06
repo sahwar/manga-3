@@ -1,10 +1,7 @@
 <div class="manga-image">
-  <a href="{{nextPageURL}}">
+  {{inc:menu}}
+  {{nextPage:if}}<a href="{{nextPageURL}}">{{end}}
     <img src="{{imageURL}}" class="manga-image" />
-  </a>
-  <span style="float: right;">
-    <a href="{{nextPageURL}}" class="btn default">Next</a>
-    <a href="{{prevPageURL}}" class="btn default">Previous</a>
-  </span>
-  
+  {{nextPage:if}}</a>{{end}}
+  {{inc:menu}}
 </div>

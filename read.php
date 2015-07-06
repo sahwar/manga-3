@@ -1,4 +1,6 @@
 <?php
+require_once('inc/functions.php');
+
 $skin = 'caramel';
 $lang = 'en';
 $allowComments = true;
@@ -14,8 +16,8 @@ if (isset($_GET['page'])){
   $page = 1;
 }
 
-if (file_exists('data/' . $lang . '/ch' . $chapter)){
-  $chapterArray = unserialize(file_get_contents('data/' . $lang . '/ch' . $chapter));
+if (file_exists('data/' . $lang . '/ch/' . $chapter)){
+  $chapterArray = unserialize(file_get_contents('data/' . $lang . '/ch/' . $chapter));
   $chapterTitle = $chapterArray['title'];
   $chapterPages = $chapterArray['pages'];
   $chapterKey = $chapterArray['imagekey'];
@@ -25,8 +27,8 @@ if (file_exists('data/' . $lang . '/ch' . $chapter)){
   // Needs proper page
 }
 
-if ($chapter > 1 && $page == 1 && file_exists('data/' . $lang . '/ch' . ($chapter - 1))){
-  $PrevChapterArray = unserialize(file_get_contents('data/' . $lang . '/ch' . ($chapter - 1)));
+if ($chapter > 1 && $page == 1 && file_exists('data/' . $lang . '/ch/' . ($chapter - 1))){
+  $PrevChapterArray = unserialize(file_get_contents('data/' . $lang . '/ch/' . ($chapter - 1)));
   $PrevChapterPages = $chapterArray['pages'];
 }
 
@@ -49,15 +51,25 @@ if ($page == 1){
   $prevPage = $page - 1;
   $nextPageCh = $chapter;
   $prevPageCh = $chapter;
-} elseif ($page == $chapterPages && $allowComments == false){
+} elseif ($page == $chapterPages && $allowComments == false && $chapter != chapterTotal()){
   $nextPage = 1;
   $prevPage = $chapterPages - 1;
   $nextPageCh = $chapter + 1;
   $prevPageCh = $chapter;
-} elseif ($page == 'comments' && $allowComments == true){
+} elseif ($page == $chapterPages && $allowComments == false && $chapter == chapterTotal()){
+  $nextPage = 0;
+  $prevPage = $chapterPages - 1;
+  $nextPageCh = 0;
+  $prevPageCh = $chapter;
+} elseif ($page == 'comments' && $allowComments == true && $chapter != chapterTotal()){
   $nextPage = 1;
   $prevPage = $chapterPages;
   $nextPageCh = $chapter + 1;
+  $prevPageCh = $chapter;
+} elseif ($page == 'comments' && $allowComments == true && $chapter == chapterTotal()){
+  $nextPage = 0;
+  $prevPage = $chapterPages;
+  $nextPageCh = 0;
   $prevPageCh = $chapter;
 } else {
   $nextPage = $page + 1;
@@ -71,14 +83,12 @@ $prevPageURL = 'read?chapter=' . $prevPageCh . '&page=' . $prevPage;
 
 $imageURL = 'content/' . $chapterKey . '/' . $page . '.png';
 //$imageURL = 'http://dummyimage.com/1533x2160/111/eee&text=Chapter+' . $chapter . '+Page+' . $page . '+(high:1533x2160)';
-
-require_once('inc/functions.php');
 ?>
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Read - Manga</title>
+    <title><?php /*echo $chapterTitle . ' - ' . $mangaTitle*/ ?>{{chapterTitle}} - {{mangaTitle}}</title>
     <?php require_skin('head.php'); ?>
     <link rel="prefetch" href="<?php echo $nextPageURL; ?>">
   </head>

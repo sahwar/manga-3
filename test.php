@@ -1,5 +1,5 @@
 <?php
-$file = '/en/ch2';
+$file = '/en/ch/2';
 
 $data = array('title' => 'Chapter 2 Title',
               'pages' => '3',
