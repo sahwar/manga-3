@@ -21,10 +21,10 @@ function require_skin_return($x, $a=0){
   if (isset($GLOBALS['nextPageCh'])){ $y = str_replace('{{nextPageCh}}', $GLOBALS['nextPageCh'], $y); }
   if (isset($GLOBALS['prevPageCh'])){ $y = str_replace('{{prevPageCh}}', $GLOBALS['prevPageCh'], $y); }
   
-  $y = preg_replace('/({{nextPage:if}})(.*?)({{end}})/is', nextPage_if('$2'), $y);
-  $y = preg_replace('/({{nextPage:ifNot}})(.*?)({{end}})/is', nextPage_ifNot('$2'), $y);
-  $y = preg_replace('/({{prevPage:if}})(.*?)({{end}})/is', prevPage_if('$2'), $y);
-  $y = preg_replace('/({{prevPage:ifNot}})(.*?)({{end}})/is', prevPage_ifNot('$2'), $y);
+  $y = preg_replace_callback('/({{nextPage:if}})(.*?)({{end}})/is', 'nextPage_if', $y);
+  $y = preg_replace_callback('/({{nextPage:ifNot}})(.*?)({{end}})/is', 'nextPage_ifNot', $y);
+  $y = preg_replace_callback('/({{prevPage:if}})(.*?)({{end}})/is', 'prevPage_if', $y);
+  $y = preg_replace_callback('/({{prevPage:ifNot}})(.*?)({{end}})/is', 'prevPage_ifNot', $y);
   
   if ($a == 0){
     $y = str_replace('{{inc:menu}}', require_skin_return('menu.php', 1), $y);
@@ -42,22 +42,22 @@ function chapterTotal() {
 // custom if tag functions
 function nextPage_if($z){
   if ($GLOBALS['nextPageCh'] != 0){
-    return $z;
+    return $z[2];
   }
 }
 function nextPage_ifNot($z){
   if ($GLOBALS['nextPageCh'] == 0){
-    return $z;
+    return $z[2];
   }
 }
 function prevPage_if($z){
   if ($GLOBALS['prevPageCh'] != 0){
-    return $z;
+    return $z[2];
   }
 }
 function prevPage_ifNot($z){
   if ($GLOBALS['prevPageCh'] == 0){
-    return $z;
+    return $z[2];
   }
 }
 ?>
