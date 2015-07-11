@@ -5,4 +5,5 @@ This is still under development and not finished.
 
 # License
 © 2015 Kazuki Hanaki
+
 Code released under GNU GENERAL PUBLIC LICENSE - Version 2, June 1991
