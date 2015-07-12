@@ -24,7 +24,8 @@ if (isset($_GET['id'])) {
     <title>Admin Panel</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.indigo-pink.min.css">
+    <!--<link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.indigo-pink.min.css">-->
+    <link rel="stylesheet" href="inc/material.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="inc/admin.css">
@@ -48,14 +49,53 @@ if (isset($_GET['id'])) {
       <nav class="demo-navigation mdl-navigation mdl-color--blue-grey-800">
         <a class="mdl-navigation__link" href="admin"><i class="mdl-color-text--blue-grey-400 material-icons">dashboard</i>Dashboard</a>
         <a class="mdl-navigation__link" href="admin?p=settings"><i class="mdl-color-text--blue-grey-400 material-icons">settings</i>Global Settings</a>
-        <a class="mdl-navigation__link" href="admin?p=chapters"><i class="mdl-color-text--blue-grey-400 material-icons">photo_library</i>Chapters</a>
+        <a class="mdl-navigation__link" href="admin?p=chapter"><i class="mdl-color-text--blue-grey-400 material-icons">photo_library</i>Chapters</a>
       </nav>
     </div>
     
     <main class="mdl-layout__content mdl-color--grey-100">
 <?php
+/* CHAPTER LIST */
+if ($page == 'chapter' && $action == '' && $id == '') {
+?>
+      <div class="mdl-grid demo-content">
+        <div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col mdl-color-text--grey-500">
+          Admin Panel &gt; Chapters
+        </div>
+      
+        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+          <thead>
+            <tr>
+              <th class="mdl-data-table__cell--non-numeric">Chapter</th>
+              <th>Edit</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+            $imageList = array_diff(scandir('data/' . $lang . '/ch'), array('..', '.'));
+            foreach($imageList as $x){
+              $array = unserialize(file_get_contents('data/' . $lang . '/ch/' . $x));
+            ?>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric">
+                <a href="read?chapter=<?php echo $x; ?>" target="_blank">
+                  <?php echo $x . ' - ' . $array['title']; ?>
+                </a>
+              </td>
+              <td>
+                <a style="mdl-button--accent" href="admin?p=chapter&a=edit&id=<?php echo $x; ?>">
+                  <i class="material-icons">mode_edit</i>
+                </a>
+              </td>
+            </tr>
+            <?php } ?>
+          </tbody>
+        </table>
+        
+      </div>
+<?php
 /* CHAPTER EDIT: MAIN */
-if ($page == 'chapter' && $action == 'edit' && $id != '') {
+} elseif ($page == 'chapter' && $action == 'edit' && $id != '') {
 ?>
       <form action="admin?p=chapter&a=edit&nid=1&go" method="post" class="mdl-grid demo-content">
         
@@ -201,6 +241,7 @@ if ($page == 'chapter' && $action == 'edit' && $id != '') {
     </main>
 
   </div>
-  <script src="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.min.js"></script>
+  <!--<script src="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.min.js"></script>-->
+  <script src="inc/material.min.js"></script>
 </body>
 </html>
