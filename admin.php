@@ -16,6 +16,17 @@ if (isset($_GET['id'])) {
 } else {
   $id = '';
 }
+
+if ($page == 'chapter' && $action == 'edit' && $id != '' && isset($_GET['go'])) {
+  $array = unserialize(file_get_contents('data/' . $lang . '/ch/' . $id));
+  $array['title'] = $_POST['title'];
+  $array['pages'] = $_POST['pages'];
+  $array['date'] = $_POST['date'];
+  $array['time'] = $_POST['time'];
+  file_put_contents('data/' . $lang . '/ch/' . $id,serialize($array));
+  header('Location: admin?p=chapter');
+  exit;
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -31,7 +42,7 @@ if (isset($_GET['id'])) {
     <link rel="stylesheet" href="inc/admin.css">
   </head>
 <body>
-  
+
   <div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
     <header class="demo-header mdl-layout__header mdl-color--white mdl-color--grey-100 mdl-color-text--grey-600">
       <div class="mdl-layout__header-row">
@@ -52,7 +63,7 @@ if (isset($_GET['id'])) {
         <a class="mdl-navigation__link" href="admin?p=chapter"><i class="mdl-color-text--blue-grey-400 material-icons">photo_library</i>Chapters</a>
       </nav>
     </div>
-    
+
     <main class="mdl-layout__content mdl-color--grey-100">
 <?php
 /* CHAPTER LIST */
@@ -62,7 +73,7 @@ if ($page == 'chapter' && $action == '' && $id == '') {
         <div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col mdl-color-text--grey-500">
           Admin Panel &gt; Chapters
         </div>
-      
+
         <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-cell mdl-cell--12-col">
           <thead>
             <tr>
@@ -91,22 +102,22 @@ if ($page == 'chapter' && $action == '' && $id == '') {
             <?php } ?>
           </tbody>
         </table>
-        
+
       </div>
 <?php
 /* CHAPTER EDIT: MAIN */
 } elseif ($page == 'chapter' && $action == 'edit' && $id != '') {
 ?>
-      <form action="admin?p=chapter&a=edit&nid=1&go" method="post" class="mdl-grid demo-content">
-        
+      <form action="admin?p=chapter&a=edit&id=<?php echo $id; ?>&go" method="post" class="mdl-grid demo-content">
+
         <?php
         $array = unserialize(file_get_contents('data/' . $lang . '/ch/' . $id));
         ?>
-        
+
         <div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col mdl-color-text--grey-500">
           Admin Panel &gt; Chapters &gt; Chapter <?php echo $id; ?> &gt; Edit
         </div>
-        
+
         <div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--9-col">
 
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width: 100%">
@@ -123,17 +134,17 @@ if ($page == 'chapter' && $action == '' && $id == '') {
 
           <br>
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width: 100%">
-            <input class="mdl-textfield__input" type="text" id="date" name="date" pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))" />
+            <input class="mdl-textfield__input" type="text" id="date" name="date" pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))" value="<?php echo $array['date']; ?>" />
             <label class="mdl-textfield__label" for="date">Release Date (YYYY-MM-DD)</label>
             <span class="mdl-textfield__error">Must be a valid date</span>
           </div>
 
           <br>
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width: 100%">
-            <input class="mdl-textfield__input" type="text" id="date" name="date" pattern="(0[0-9]|1[0-9]|2[0-3])(:[0-5][0-9]){2}" />
-            <label class="mdl-textfield__label" for="date">Release Time (HH:MM:SS)</label>
+            <input class="mdl-textfield__input" type="text" id="time" name="time" pattern="(0[0-9]|1[0-9]|2[0-3])(:[0-5][0-9]){2}" value="<?php echo $array['time']; ?>" />
+            <label class="mdl-textfield__label" for="time">Release Time (HH:MM:SS)</label>
             <span class="mdl-textfield__error">Must be a valid time</span>
-          </div> 
+          </div>
 
         </div>
 
@@ -158,15 +169,15 @@ if ($page == 'chapter' && $action == '' && $id == '') {
 } elseif ($page == 'chapter' && $action == 'images' && $id != '') {
 ?>
       <div class="mdl-grid demo-content">
-        
+
         <?php
         $array = unserialize(file_get_contents('data/' . $lang . '/ch/' . $id));
         ?>
-        
+
         <div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col mdl-color-text--grey-500">
           Admin Panel &gt; Chapters &gt; Chapter <?php echo $id; ?> &gt; Edit &gt; Manage Images (<?php echo $array['imagekey']; ?>)
         </div>
-        
+
         <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-cell mdl-cell--9-col">
           <thead>
             <tr>
@@ -194,7 +205,7 @@ if ($page == 'chapter' && $action == '' && $id == '') {
             <?php } ?>
           </tbody>
         </table>
-        
+
         <div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col">
           <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" href="admin?p=chapter&a=edit&id=<?php echo $id; ?>">
               Back
@@ -206,28 +217,28 @@ if ($page == 'chapter' && $action == '' && $id == '') {
               Delete All
           </a>
         </div>
-        
+
       </div>
 <?php
 /* CHAPTER EDIT: ADD IMAGE(S) */
 } elseif ($page == 'chapter' && $action == 'add' && $id != '') {
 ?>
       <div class="mdl-grid demo-content">
-        
+
         <?php
         $array = unserialize(file_get_contents('data/' . $lang . '/ch/' . $id));
         ?>
-        
+
         <div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col mdl-color-text--grey-500">
           Admin Panel &gt; Chapters &gt; Chapter <?php echo $id; ?> &gt; Edit &gt; Add Images
         </div>
-        
+
         <div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--9-col">
           <script src="inc/dropzone.js"></script>
           <link rel="stylesheet" href="inc/dropzone.css">
           <form action="inc/imageupload.php?ik=<?php echo $array['imagekey']; ?>" class="dropzone"></form>
         </div>
-        
+
         <div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col">
           <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" href="admin?p=chapter&a=edit&id=<?php echo $id; ?>">
               Back
@@ -236,7 +247,7 @@ if ($page == 'chapter' && $action == '' && $id == '') {
               Manage Images
           </a><br>
         </div>
-        
+
 <?php } ?>
     </main>
 
