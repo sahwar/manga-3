@@ -26,6 +26,29 @@ if ($page == 'chapter' && $action == 'edit' && $id != '' && isset($_GET['go'])) 
   file_put_contents('data/' . $lang . '/ch/' . $id,serialize($array));
   header('Location: admin?p=chapter');
   exit;
+} elseif ($page == 'chapter' && $action == 'deleteimage' && $id != '' && isset($_GET['file']) && !isset($_GET['all'])){
+  $array = unserialize(file_get_contents('data/' . $lang . '/ch/' . $id));
+  unlink('content/' . $array['imagekey'] . '/' . $_GET['file']);
+  header('Location: admin?p=chapter&a=images&id=' . $id);
+  exit;
+} elseif ($page == 'chapter' && $action == 'deleteimage' && $id != '' && !isset($_GET['file']) && isset($_GET['all']) && isset($_GET['confirm'])){
+  $array = unserialize(file_get_contents('data/' . $lang . '/ch/' . $id));
+  $imageList = array_diff(scandir('content/' . $array['imagekey']), array('..', '.'));
+  foreach($imageList as $x){
+    unlink('content/' . $array['imagekey'] . '/' . $x);
+  }
+  header('Location: admin?p=chapter&a=images&id=' . $id);
+  exit;
+} elseif ($page == 'chapter' && $action == 'deleteall' && $id != '' && isset($_GET['confirm'])){
+    $array = unserialize(file_get_contents('data/' . $lang . '/ch/' . $id));
+    $imageList = array_diff(scandir('content/' . $array['imagekey']), array('..', '.'));
+    foreach($imageList as $x){
+      unlink('content/' . $array['imagekey'] . '/' . $x);
+    }
+    rmdir('content/' . $array['imagekey']);
+    unlink('data/' . $lang . '/ch/' . $id);
+    header('Location: admin?p=chapter');
+    exit;
 }
 ?>
 <!DOCTYPE html>
@@ -35,8 +58,7 @@ if ($page == 'chapter' && $action == 'edit' && $id != '' && isset($_GET['go'])) 
     <title>Admin Panel</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-    <!--<link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.indigo-pink.min.css">-->
-    <link rel="stylesheet" href="inc/material.min.css">
+    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.blue_grey-pink.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="inc/admin.css">
@@ -247,12 +269,67 @@ if ($page == 'chapter' && $action == '' && $id == '') {
               Manage Images
           </a><br>
         </div>
+<?php
+/* CHAPTER EDIT: DELETE ALL IMAGES CONFIRMATION */
+} elseif ($page == 'chapter' && $action == 'deleteimage' && $id != '' && !isset($_GET['file']) && isset($_GET['all']) && !isset($_GET['confirm'])){
+?>
+        <div class="mdl-grid demo-content">
+          <div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col mdl-color-text--grey-500">
+            Admin Panel &gt; Chapters &gt; Chapter <?php echo $id; ?> &gt; Edit &gt; Delete All Images
+          </div>
 
+          <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+            <div class="mdl-card__supporting-text">
+              Are you sure you want to delete all images for this chapter? This action <strong>cannot</strong> be undone.
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+              <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="admin?p=chapter&a=images&id=<?php echo $id; ?>">
+                Go Back
+              </a>
+              <a class="mdl-button mdl-button--accent mdl-js-button mdl-js-ripple-effect" href="admin?p=chapter&a=deleteimage&id=<?php echo $id; ?>&all&confirm">
+                Delete All Images
+              </a>
+            </div>
+          </div>
+
+        </div>
+<?php
+/* CHAPTER EDIT: DELETE ALL IMAGES CONFIRMATION */
+} elseif ($page == 'chapter' && $action == 'deleteall' && $id != '' && !isset($_GET['confirm'])){
+?>
+        <div class="mdl-grid demo-content">
+          <div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col mdl-color-text--grey-500">
+            Admin Panel &gt; Chapters &gt; Chapter <?php echo $id; ?> &gt; Edit &gt; Delete Chapter
+          </div>
+
+          <!--<div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" href="admin?p=chapter&a=edit&id=<?php echo $id; ?>">
+                Back
+            </a><br>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" href="admin?p=chapter&a=deleteimage&id=<?php echo $id; ?>&all&confirm">
+                Delete ALL Images
+            </a>
+          </div>-->
+
+          <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+            <div class="mdl-card__supporting-text">
+              Are you sure you want to delete the entire chapter? This includes all images associated with this chapter. This action <strong>cannot</strong> be undone.
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+              <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="admin?p=chapter&a=edit&id=<?php echo $id; ?>">
+                Go Back
+              </a>
+              <a class="mdl-button mdl-button--accent mdl-js-button mdl-js-ripple-effect" href="admin?p=chapter&a=deleteall&id=<?php echo $id; ?>&confirm">
+                Delete Entire Chaper
+              </a>
+            </div>
+          </div>
+
+        </div>
 <?php } ?>
     </main>
 
   </div>
-  <!--<script src="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.min.js"></script>-->
-  <script src="inc/material.min.js"></script>
+  <script src="https://storage.googleapis.com/code.getmdl.io/1.0.0/material.min.js"></script>
 </body>
 </html>
