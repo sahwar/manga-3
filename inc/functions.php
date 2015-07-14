@@ -8,7 +8,7 @@ function require_skin_return($x, $a=0){
   require('skins/' . $GLOBALS['skin'] . '/' . $x);
   $y = ob_get_contents();
   ob_end_clean();
-  
+
   if (isset($GLOBALS['skin'])){ $y = str_replace('{{skinURL}}', 'skins/' . $GLOBALS['skin'], $y); }
   if (isset($GLOBALS['imageURL'])){ $y = str_replace('{{imageURL}}', $GLOBALS['imageURL'], $y); }
   if (isset($GLOBALS['chapter'])){ $y = str_replace('{{chapter}}', $GLOBALS['chapter'], $y); }
@@ -20,16 +20,16 @@ function require_skin_return($x, $a=0){
   if (isset($GLOBALS['prevPage'])){ $y = str_replace('{{prevPage}}', $GLOBALS['prevPage'], $y); }
   if (isset($GLOBALS['nextPageCh'])){ $y = str_replace('{{nextPageCh}}', $GLOBALS['nextPageCh'], $y); }
   if (isset($GLOBALS['prevPageCh'])){ $y = str_replace('{{prevPageCh}}', $GLOBALS['prevPageCh'], $y); }
-  
+
   $y = preg_replace_callback('/({{nextPage:if}})(.*?)({{end}})/is', 'nextPage_if', $y);
   $y = preg_replace_callback('/({{nextPage:ifNot}})(.*?)({{end}})/is', 'nextPage_ifNot', $y);
   $y = preg_replace_callback('/({{prevPage:if}})(.*?)({{end}})/is', 'prevPage_if', $y);
   $y = preg_replace_callback('/({{prevPage:ifNot}})(.*?)({{end}})/is', 'prevPage_ifNot', $y);
-  
+
   if ($a == 0){
-    $y = str_replace('{{inc:menu}}', require_skin_return('menu.php', 1), $y);
+    $y = preg_replace_callback('/({{inc:)(.*)(}})/i', 'customIncTag', $y);
   }
-  
+
   return $y;
 }
 
@@ -59,5 +59,8 @@ function prevPage_ifNot($z){
   if ($GLOBALS['prevPageCh'] == 0){
     return $z[2];
   }
+}
+function customIncTag($z){
+  return require_skin_return($z[2] . '.php', 1);
 }
 ?>
