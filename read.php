@@ -16,6 +16,8 @@ if (isset($_GET['page'])){
   $page = 1;
 }
 
+$mangaTitle = 'Untitled';
+
 if (file_exists('data/' . $lang . '/ch/' . $chapter)){
   $chapterArray = unserialize(file_get_contents('data/' . $lang . '/ch/' . $chapter));
   $chapterTitle = $chapterArray['title'];
@@ -88,7 +90,7 @@ $imageURL = 'content/' . $chapterKey . '/' . $page . '.png';
 <html>
   <head>
     <meta charset="utf-8">
-    <title><?php /*echo $chapterTitle . ' - ' . $mangaTitle*/ ?>{{chapterTitle}} - {{mangaTitle}}</title>
+    <title><?php echo $chapterTitle . ' - ' . $mangaTitle ?></title>
     <?php require_skin('head.php'); ?>
     <link rel="prefetch" href="<?php echo $nextPageURL; ?>">
   </head>

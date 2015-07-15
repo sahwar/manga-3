@@ -17,14 +17,24 @@ if (isset($_GET['id'])) {
   $id = '';
 }
 
-if ($page == 'chapter' && $action == 'edit' && $id != '' && isset($_GET['go'])) {
-  $array = unserialize(file_get_contents('data/' . $lang . '/ch/' . $id));
+if ($page == 'chapter' && $action == 'edit' && $id != '' && isset($_GET['go']) || $page == 'chapter' && $action == 'add' && isset($_GET['go'])) {
+  if ($action == 'edit') {
+    $array = unserialize(file_get_contents('data/' . $lang . '/ch/' . $id));
+  } else {
+    $array['imagekey'] = md5($_SERVER['REMOTE_ADDR'].microtime().rand(1,100000));
+    mkdir('content/' . $array['imagekey']);
+    $id = $_POST['id'];
+  }
   $array['title'] = $_POST['title'];
   $array['pages'] = $_POST['pages'];
   $array['date'] = $_POST['date'];
   $array['time'] = $_POST['time'];
   file_put_contents('data/' . $lang . '/ch/' . $id,serialize($array));
-  header('Location: admin?p=chapter');
+  if ($action == 'edit') {
+    header('Location: admin?p=chapter&a=edit&id=' . $id . '&saved');
+  } else {
+    header('Location: admin?p=chapter&a=edit&id=' . $id . '&added');
+  }
   exit;
 } elseif ($page == 'chapter' && $action == 'deleteimage' && $id != '' && isset($_GET['file']) && !isset($_GET['all'])){
   $array = unserialize(file_get_contents('data/' . $lang . '/ch/' . $id));
@@ -70,12 +80,6 @@ if ($page == 'chapter' && $action == 'edit' && $id != '' && isset($_GET['go'])) 
       <div class="mdl-layout__header-row">
         <span class="mdl-layout-title">Admin Panel</span>
         <div class="mdl-layout-spacer"></div>
-        <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="hdrbtn">
-          <i class="material-icons">more_vert</i>
-        </button>
-        <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="hdrbtn">
-          <li class="mdl-menu__item">View Site</li>
-        </ul>
       </div>
     </header>
     <div class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
@@ -96,51 +100,87 @@ if ($page == 'chapter' && $action == '' && $id == '') {
           Admin Panel &gt; Chapters
         </div>
 
-        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-cell mdl-cell--12-col">
-          <thead>
-            <tr>
-              <th class="mdl-data-table__cell--non-numeric">Chapter</th>
-              <th>Edit</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php
-            $imageList = array_diff(scandir('data/' . $lang . '/ch'), array('..', '.'));
-            foreach($imageList as $x){
-              $array = unserialize(file_get_contents('data/' . $lang . '/ch/' . $x));
-            ?>
-            <tr>
-              <td class="mdl-data-table__cell--non-numeric">
-                <a href="read?chapter=<?php echo $x; ?>" target="_blank">
-                  <?php echo $x . ' - ' . $array['title']; ?>
-                </a>
-              </td>
-              <td>
-                <a style="mdl-button--accent" href="admin?p=chapter&a=edit&id=<?php echo $x; ?>">
-                  <i class="material-icons">mode_edit</i>
-                </a>
-              </td>
-            </tr>
-            <?php } ?>
-          </tbody>
-        </table>
+        <?php if (chapterTotal() > 0) { ?>
+          <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp mdl-cell mdl-cell--12-col">
+            <thead>
+              <tr>
+                <th class="mdl-data-table__cell--non-numeric">Chapter</th>
+                <th>Edit</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+              $imageList = array_diff(scandir('data/' . $lang . '/ch'), array('..', '.'));
+              foreach($imageList as $x){
+                $array = unserialize(file_get_contents('data/' . $lang . '/ch/' . $x));
+              ?>
+              <tr>
+                <td class="mdl-data-table__cell--non-numeric">
+                  <a href="read?chapter=<?php echo $x; ?>" target="_blank">
+                    <?php echo $x . ' - ' . $array['title']; ?>
+                  </a>
+                </td>
+                <td>
+                  <a style="mdl-button--accent" href="admin?p=chapter&a=edit&id=<?php echo $x; ?>">
+                    <i class="material-icons">mode_edit</i>
+                  </a>
+                </td>
+              </tr>
+              <?php } ?>
+            </tbody>
+          </table>
+        <?php } ?>
+
+        <div class="mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col mdl-color-text--grey-500 mdl-card__actions mdl-card--border">
+          <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="admin?p=chapter&a=add">
+            Add Chapter
+          </a>
+        </div>
 
       </div>
 <?php
 /* CHAPTER EDIT: MAIN */
-} elseif ($page == 'chapter' && $action == 'edit' && $id != '') {
+} elseif ($page == 'chapter' && $action == 'edit' && $id != '' || $page == 'chapter' && $action == 'add') {
 ?>
-      <form action="admin?p=chapter&a=edit&id=<?php echo $id; ?>&go" method="post" class="mdl-grid demo-content">
-
-        <?php
-        $array = unserialize(file_get_contents('data/' . $lang . '/ch/' . $id));
-        ?>
+      <?php if ($action == 'edit') { ?>
+        <form action="admin?p=chapter&a=edit&id=<?php echo $id; ?>&go" method="post" class="mdl-grid demo-content">
+      <?php
+      $array = unserialize(file_get_contents('data/' . $lang . '/ch/' . $id));
+      } else { ?>
+        <form action="admin?p=chapter&a=add&go" method="post" class="mdl-grid demo-content">
+      <?php
+      $array = array('title' => '',
+                     'pages' => '',
+                     'date' => '',
+                     'time' => '');
+      } ?>
 
         <div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col mdl-color-text--grey-500">
           Admin Panel &gt; Chapters &gt; Chapter <?php echo $id; ?> &gt; Edit
         </div>
 
+        <?php if (isset($_GET['saved'])) { ?>
+          <div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col mdl-color-text--green-500">
+            <strong>Chapter Saved</strong>
+          </div>
+        <?php } ?>
+
+        <?php if (isset($_GET['added'])) { ?>
+          <div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col mdl-color-text--green-500">
+            <strong>New Chapter Added</strong>
+          </div>
+        <?php } ?>
+
         <div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--9-col">
+
+          <?php if ($action == 'add') { ?>
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width: 100%">
+              <input class="mdl-textfield__input" type="text" id="id" name="id" pattern="[0-9]*" value="<?php echo (chapterTotal() + 1); ?>" required />
+              <label class="mdl-textfield__label" for="pages">Chapter</label>
+              <span class="mdl-textfield__error">Must be a number</span>
+            </div>
+            <br>
+          <?php } ?>
 
           <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" style="width: 100%">
             <input class="mdl-textfield__input" type="text" id="title" name="title" value="<?php echo $array['title']; ?>" />
@@ -171,18 +211,23 @@ if ($page == 'chapter' && $action == '' && $id == '') {
         </div>
 
         <div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--3-col">
+          <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" href="admin?p=chapter">
+              Chapter List
+          </a><br>
           <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" type="submit">
               Save
           </button><br>
-          <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" href="admin?p=chapter&a=images&id=<?php echo $id; ?>">
-              Manage Images
-          </a><br>
-          <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" href="admin?p=chapter&a=add&id=<?php echo $id; ?>">
-              Add Images
-          </a><br>
-          <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" href="admin?p=chapter&a=deleteall&id=<?php echo $id; ?>">
-              Delete Chapter
-          </a>
+          <?php if ($action == 'edit'){ ?>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" href="admin?p=chapter&a=images&id=<?php echo $id; ?>">
+                Manage Images
+            </a><br>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" href="admin?p=chapter&a=addimages&id=<?php echo $id; ?>">
+                Add Images
+            </a><br>
+            <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" href="admin?p=chapter&a=deleteall&id=<?php echo $id; ?>">
+                Delete Chapter
+            </a>
+          <?php } ?>
         </div>
 
       </form>
@@ -216,7 +261,7 @@ if ($page == 'chapter' && $action == '' && $id == '') {
             <tr>
               <td class="mdl-data-table__cell--non-numeric"><a href="content/<?php echo $array['imagekey'] . '/' . $x; ?>" target="_blank"><?php echo $x; ?></a></td>
               <td>
-                <?php echo round((filesize('content/ch1/' . $x) / 1024), 2) . ' KB'; ?>
+                <?php echo round((filesize('content/' . $array['imagekey'] . '/' . $x) / 1024), 2) . ' KB'; ?>
               </td>
               <td>
                 <a style="mdl-button--accent" href="admin?p=chapter&a=deleteimage&id=<?php echo $id; ?>&file=<?php echo $x; ?>">
@@ -232,7 +277,7 @@ if ($page == 'chapter' && $action == '' && $id == '') {
           <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" href="admin?p=chapter&a=edit&id=<?php echo $id; ?>">
               Back
           </a><br>
-          <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" href="admin?p=chapter&a=add&id=<?php echo $id; ?>">
+          <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" href="admin?p=chapter&a=addimages&id=<?php echo $id; ?>">
               Add Images
           </a><br>
           <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" href="admin?p=chapter&a=deleteimage&id=<?php echo $id; ?>&all">
@@ -243,7 +288,7 @@ if ($page == 'chapter' && $action == '' && $id == '') {
       </div>
 <?php
 /* CHAPTER EDIT: ADD IMAGE(S) */
-} elseif ($page == 'chapter' && $action == 'add' && $id != '') {
+} elseif ($page == 'chapter' && $action == 'addimages' && $id != '') {
 ?>
       <div class="mdl-grid demo-content">
 
@@ -301,15 +346,6 @@ if ($page == 'chapter' && $action == '' && $id == '') {
           <div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col mdl-color-text--grey-500">
             Admin Panel &gt; Chapters &gt; Chapter <?php echo $id; ?> &gt; Edit &gt; Delete Chapter
           </div>
-
-          <!--<div class="demo-graphs mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" href="admin?p=chapter&a=edit&id=<?php echo $id; ?>">
-                Back
-            </a><br>
-            <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" href="admin?p=chapter&a=deleteimage&id=<?php echo $id; ?>&all&confirm">
-                Delete ALL Images
-            </a>
-          </div>-->
 
           <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col">
             <div class="mdl-card__supporting-text">

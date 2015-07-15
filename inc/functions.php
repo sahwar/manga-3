@@ -27,7 +27,7 @@ function require_skin_return($x, $a=0){
   $y = preg_replace_callback('/({{prevPage:ifNot}})(.*?)({{end}})/is', 'prevPage_ifNot', $y);
 
   if ($a == 0){
-    $y = preg_replace_callback('/({{inc:)(.*)(}})/i', 'customIncTag', $y);
+    $y = preg_replace_callback('/({{inc:)(.*?)(}})/i', 'customIncTag', $y);
   }
 
   return $y;
@@ -37,6 +37,13 @@ function require_skin_return($x, $a=0){
 function chapterTotal() {
   $fi = new FilesystemIterator(__DIR__ . '/../data/' . $GLOBALS['lang'] . '/ch/', FilesystemIterator::SKIP_DOTS);
   return sprintf('%d', iterator_count($fi));
+}
+
+// convert image to data uri
+function getDataURI($x) {
+  $finfo = finfo_open(FILEINFO_MIME_TYPE);
+  $mime = finfo_file($finfo, $x);
+  return 'data:' . $mime . ';base64,' . base64_encode(file_get_contents($x));
 }
 
 // custom if tag functions
@@ -60,6 +67,8 @@ function prevPage_ifNot($z){
     return $z[2];
   }
 }
+
+// custom inc tag
 function customIncTag($z){
   return require_skin_return($z[2] . '.php', 1);
 }
