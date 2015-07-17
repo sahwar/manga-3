@@ -11,6 +11,7 @@ function require_skin_return($x, $a=0){
 
   if (isset($GLOBALS['skin'])){ $y = str_replace('{{skinURL}}', 'skins/' . $GLOBALS['skin'], $y); }
   if (isset($GLOBALS['imageURL'])){ $y = str_replace('{{imageURL}}', $GLOBALS['imageURL'], $y); }
+  if (isset($GLOBALS['imageURL2'])){ $y = str_replace('{{imageURL2}}', $GLOBALS['imageURL2'], $y); }
   if (isset($GLOBALS['chapter'])){ $y = str_replace('{{chapter}}', $GLOBALS['chapter'], $y); }
   if (isset($GLOBALS['page'])){ $y = str_replace('{{page}}', $GLOBALS['page'], $y); }
   if (isset($GLOBALS['chapterTitle'])){ $y = str_replace('{{chapterTitle}}', $GLOBALS['chapterTitle'], $y); }
@@ -25,6 +26,8 @@ function require_skin_return($x, $a=0){
   $y = preg_replace_callback('/({{nextPage:ifNot}})(.*?)({{end}})/is', 'nextPage_ifNot', $y);
   $y = preg_replace_callback('/({{prevPage:if}})(.*?)({{end}})/is', 'prevPage_if', $y);
   $y = preg_replace_callback('/({{prevPage:ifNot}})(.*?)({{end}})/is', 'prevPage_ifNot', $y);
+  $y = preg_replace_callback('/({{mobile:if}})(.*?)({{end}})/is', 'mobile_if', $y);
+  $y = preg_replace_callback('/({{mobile:ifNot}})(.*?)({{end}})/is', 'mobile_ifNot', $y);
 
   if ($a == 0){
     $y = preg_replace_callback('/({{inc:)(.*?)(}})/i', 'customIncTag', $y);
@@ -35,8 +38,8 @@ function require_skin_return($x, $a=0){
 
 // count amount of chapters
 function chapterTotal() {
-  $fi = new FilesystemIterator(__DIR__ . '/../data/' . $GLOBALS['lang'] . '/ch/', FilesystemIterator::SKIP_DOTS);
-  return sprintf('%d', iterator_count($fi));
+  $x = new FilesystemIterator(__DIR__ . '/../data/' . $GLOBALS['lang'] . '/ch/', FilesystemIterator::SKIP_DOTS);
+  return sprintf('%d', iterator_count($x));
 }
 
 // convert image to data uri
@@ -64,6 +67,16 @@ function prevPage_if($z){
 }
 function prevPage_ifNot($z){
   if ($GLOBALS['prevPageCh'] == 0){
+    return $z[2];
+  }
+}
+function mobile_if($z){
+  if ($GLOBALS['isMobile'] == true){
+    return $z[2];
+  }
+}
+function mobile_ifNot($z){
+  if ($GLOBALS['isMobile'] != true){
     return $z[2];
   }
 }

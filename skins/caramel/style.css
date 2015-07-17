@@ -21,3 +21,14 @@
     width: 970px;
   }
 }
+
+.manga-image-double {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+.manga-image-double-half {
+  width: 50%;
+  height: auto;
+}

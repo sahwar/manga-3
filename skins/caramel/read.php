@@ -1,5 +1,5 @@
 <div class="manga-image">
-  {{inc:menu}}
+  {{mobile:ifNot}}{{inc:menu}}{{end}}
   {{nextPage:if}}<a href="{{nextPageURL}}">{{end}}
     <img src="{{imageURL}}" class="manga-image" />
   {{nextPage:if}}</a>{{end}}
