@@ -17,7 +17,9 @@ if (isset($_GET['id'])) {
   $id = '';
 }
 
-if ($page == 'chapter' && $action == 'edit' && $id != '' && isset($_GET['go']) || $page == 'chapter' && $action == 'add' && isset($_GET['go'])) {
+if ($page == ''){
+  header('Location: admin?p=chapter');
+} elseif ($page == 'chapter' && $action == 'edit' && $id != '' && isset($_GET['go']) || $page == 'chapter' && $action == 'add' && isset($_GET['go'])) {
   if ($action == 'edit') {
     $array = unserialize(file_get_contents('data/' . $lang . '/ch/' . $id));
   } else {
@@ -91,7 +93,7 @@ if ($page == 'chapter' && $action == 'edit' && $id != '' && isset($_GET['go']) |
 
         <ul class="right">
             <li><a href="admin?p=version">Version</a></li>
-            <li><a href="http://github.com/KazukiKF/manga" target="_blank"><i class="fa fa-github-alt fa-fw"></i></a></li>
+            <li><a href="https://github.com/kyufox/manga" target="_blank"><i class="fa fa-github-alt fa-fw"></i></a></li>
         </ul>
     </nav>
   </header>
