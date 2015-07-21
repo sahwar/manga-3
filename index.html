@@ -1,37 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manga Project</title>
+    <title>MANGA PROJECT</title>
     <link href="caramel/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="caramel/css/caramel.min.css" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <style>
-        .center {
-            -webkit-transform: translate(-50%, -50%);
-            -moz-transform: translate(-50%, -50%);
-            transform: translate(-50%, -50%);
-            text-align: center;
-            position: absolute;
-            min-width: 200px;
-            width: 100%;
-            left: 50%;
-            top: 50%;
-        }
+      html,body {
+        background-color: #333;
+        background-image: url(images/thelastmahoushoujo_background.png);
+        background-attachment: fixed;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        height: 100%;
+      }
+      body {
+        color: #eee;
+        text-shadow: 0 1px 3px rgba(0,0,0,.5);
+        font-family: 'Roboto Condensed', sans-serif;
+      }
+      .main-image-container {
+          max-width: 768px;
+      }
+      .main-image {
+        max-width: 100%;
+        height: auto;
+        display: block;
+      }
+      .lead {
+        font-size: 21px;
+        margin-bottom: 16px;
+        font-weight: 300px;
+      }
+      .btn.white.clean {
+        color: #eee;
+        border: 2px solid #eee;
+        background: transparent;
+      }
+      .btn.grey.clean {
+        color: #999;
+        border: 2px solid #999;
+        background: transparent;
+        cursor:not-allowed
+      }
+      footer {
+        color: #999;
+        color: rgba(255,255,255,.5);
+      }
     </style>
   </head>
 <body>
   <div class="center">
-    <!-- LOGO (none yet) -->
-    <h2>Manga Project</h2>
-    <h4>Still in Development</h4>
+    <div class="main-image-container">
+      <img src="images/manga_project_trans_alt.png" alt="MANGA PROJECT" class="main-image" />
+    </div>
+    <p class="lead">Still in development</p>
     <br>
-    <a href="http://open.kyufox.com/manga/read" class="btn warn clean">Live Demo</a>&nbsp;
-    <a href="http://open.kyufox.com/manga/admin" class="btn error clean">Admin Panel Demo</a>&nbsp;
-    <a href="https://github.com/kyufox/manga" class="btn dark clean"><i class="fa fa-github"></i> GitHub</a>
-    <br>
-    <footer>
-      <p>&copy;2015 <a href="https://github.com/KazukiKF" class="color error">花木カズキ</a> / <a href="http://kyufox.com/" class="color error">吸血フォックス</a></p>
+    <a href="http://open.kyufox.com/manga/read" class="btn white clean">Live Demo</a>&nbsp;
+    <a href="http://open.kyufox.com/manga/admin" class="btn white clean">Admin Panel Demo</a>&nbsp;
+    <a href="#" class="btn grey clean">Documentation</a>&nbsp;
+    <a href="https://github.com/kyufox/manga" class="btn white clean"><i class="fa fa-github"></i> GitHub</a>
+    <footer style="margin-top: 64px;">
+      <p>
+        &copy;2015 花木カズキ ／ 吸血フォックス 　&mdash;　
+        最後の魔法少女&amp;榊原夏子 &copy; 花木カズキ ／ 吸血フォックス ／ THE LAST Magical Girl PROJECT
+      </p>
     </footer>
   </div>
 </body>
