@@ -100,8 +100,26 @@ if ($page == ''){
   <br>
   <main>
 <?php
+/* */
+if ($page == 'settings'  && $action == ''){
+?>
+
+      <div class="nav bar breadcrumbs">
+        Admin Panel &nbsp;/&nbsp; Global Settings
+      </div><br>
+
+      <div class="box col-10">
+        <input type="text" id="lang" name="lang" value="<?php echo $lang; ?>" placeholder="Language" required />
+        <select name="timezone" id="timezone">
+          <?php foreach(DateTimeZone::listIdentifiers(DateTimeZone::ALL) as $tzlist) {
+            echo '<option value="' . $tzlist . '">' . $tzlist . '</option>';
+          } ?>
+        </select>
+      </div>
+
+<?php
 /* CHAPTER LIST */
-if ($page == 'chapter' && $action == '' && $id == '') {
+} elseif ($page == 'chapter' && $action == '' && $id == '') {
 ?>
 
       <div class="row">
@@ -208,9 +226,9 @@ if ($page == 'chapter' && $action == '' && $id == '') {
               <a class="btn error clean" style="display: block;" href="admin?p=chapter&a=deleteall&id=<?php echo $id; ?>">
                   Delete Chapter
               </a>
+            <?php } ?>
             </div>
           </div>
-        <?php } ?>
 
       </form>
 <?php
