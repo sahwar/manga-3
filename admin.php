@@ -52,15 +52,22 @@ if ($page == ''){
   header('Location: admin?p=chapter&a=images&id=' . $id);
   exit;
 } elseif ($page == 'chapter' && $action == 'deleteall' && $id != '' && isset($_GET['confirm'])){
-    $array = unserialize(file_get_contents('data/' . $lang . '/ch/' . $id));
-    $imageList = array_diff(scandir('content/' . $array['imagekey']), array('..', '.'));
-    foreach($imageList as $x){
-      unlink('content/' . $array['imagekey'] . '/' . $x);
-    }
-    rmdir('content/' . $array['imagekey']);
-    unlink('data/' . $lang . '/ch/' . $id);
-    header('Location: admin?p=chapter');
-    exit;
+  $array = unserialize(file_get_contents('data/' . $lang . '/ch/' . $id));
+  $imageList = array_diff(scandir('content/' . $array['imagekey']), array('..', '.'));
+  foreach($imageList as $x){
+    unlink('content/' . $array['imagekey'] . '/' . $x);
+  }
+  rmdir('content/' . $array['imagekey']);
+  unlink('data/' . $lang . '/ch/' . $id);
+  header('Location: admin?p=chapter');
+  exit;
+} elseif ($page == 'settings'  && $action == '' && isset($_GET['go'])){
+  $array = unserialize(file_get_contents('data/settings'));
+  $array['lang'] = $_POST['lang'];
+  $array['timezone'] = $_POST['timezone'];
+  file_put_contents('data/settings',serialize($array));
+  header('Location: admin?p=settings&saved');
+  exit;
 }
 ?>
 <!DOCTYPE html>
@@ -100,21 +107,44 @@ if ($page == ''){
   <br>
   <main>
 <?php
-/* */
+/* GLOBAL SETTINGS */
 if ($page == 'settings'  && $action == ''){
 ?>
 
-      <div class="nav bar breadcrumbs">
-        Admin Panel &nbsp;/&nbsp; Global Settings
-      </div><br>
+      <div class="row">
 
-      <div class="box col-10">
-        <input type="text" id="lang" name="lang" value="<?php echo $lang; ?>" placeholder="Language" required />
-        <select name="timezone" id="timezone">
-          <?php foreach(DateTimeZone::listIdentifiers(DateTimeZone::ALL) as $tzlist) {
-            echo '<option value="' . $tzlist . '">' . $tzlist . '</option>';
-          } ?>
-        </select>
+        <div class="nav bar breadcrumbs">
+          Admin Panel &nbsp;/&nbsp; Global Settings
+        </div><br>
+
+        <?php if (isset($_GET['saved'])) { ?>
+          <div class="alert success" id="note" style="margin-bottom: 16px;">
+            <div class="dismiss"><i class="fa fa-close"></i></div>
+            <strong>Chapter Saved</strong>
+          </div>
+        <?php } ?>
+
+        <form method="post" action="admin?p=settings&go">
+          <?php $array = unserialize(file_get_contents('data/settings')); ?>
+          <div class="box col-10">
+            <input type="text" id="lang" name="lang" value="<?php echo $array['lang']; ?>" placeholder="Language" required />
+            <select name="timezone" id="timezone">
+              <?php foreach(DateTimeZone::listIdentifiers(DateTimeZone::ALL) as $tzlist) {
+                if ($array['timezone'] == $tzlist) {
+                  echo '<option value="' . $tzlist . '" selected>' . $tzlist . '</option>';
+                } else {
+                  echo '<option value="' . $tzlist . '">' . $tzlist . '</option>';
+                }
+              } ?>
+            </select>
+          </div>
+          <div class="box col-2">
+            <button class="btn success clean" style="width: 100%;" type="submit">Save</button>
+            <a class="btn default clean" style="display: block;" href="admin?p=settings">Cancel Changes</a>
+            <a class="btn default clean" style="display: block;" href="admin?p=settings&a=skins">Skins</a>
+          </div>
+        </form>
+
       </div>
 
 <?php
