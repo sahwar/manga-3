@@ -80,7 +80,7 @@ if ($page == ''){
     <link type="text/css" rel="stylesheet" href="skins/caramel/css/font-awesome.min.css" />
     <link type="text/css" rel="stylesheet" href="skins/caramel/css/caramel.min.css" />
     <style>
-      input[type="text"] {
+      input[type="text"],select.dropdown {
        width: 100%;
        box-sizing: border-box;
        -webkit-box-sizing:border-box;
@@ -128,7 +128,7 @@ if ($page == 'settings'  && $action == ''){
           <?php $array = unserialize(file_get_contents('data/settings')); ?>
           <div class="box col-10">
             <input type="text" id="lang" name="lang" value="<?php echo $array['lang']; ?>" placeholder="Language" required />
-            <select name="timezone" id="timezone">
+            <select name="timezone" id="timezone" class="dropdown">
               <?php foreach(DateTimeZone::listIdentifiers(DateTimeZone::ALL) as $tzlist) {
                 if ($array['timezone'] == $tzlist) {
                   echo '<option value="' . $tzlist . '" selected>' . $tzlist . '</option>';
@@ -141,7 +141,7 @@ if ($page == 'settings'  && $action == ''){
           <div class="box col-2">
             <button class="btn success clean" style="width: 100%;" type="submit">Save</button>
             <a class="btn default clean" style="display: block;" href="admin?p=settings">Cancel Changes</a>
-            <a class="btn default clean" style="display: block;" href="admin?p=settings&a=skins">Skins</a>
+            <a class="btn info clean" style="display: block;" href="admin?p=settings&a=skins">Skins</a>
           </div>
         </form>
 
