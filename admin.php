@@ -107,8 +107,54 @@ if ($page == ''){
   <br>
   <main>
 <?php
+/* VERSION INFO */
+if ($page == 'version'){
+  function get_json($url){
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($curl, CURLOPT_USERAGENT, 'Awesome-Octocat-App');
+    $content = curl_exec($curl);
+    curl_close($curl);
+    return $content;
+  }
+  $github_latest = json_decode(get_json('https://api.github.com/repos/kyufox/manga/releases/latest'), true);
+  $current_version = 'none';
+  if (isset($github_latest['tag_name'])){ $latest_version = $github_latest['tag_name']; } else {$latest_version = 'none';}
+  if ($latest_version != 'none' && $latest_version > $current_version){
+    $new_version = true;
+  } else {
+    $new_version = false;
+  }
+  $github_commit = json_decode(get_json('https://api.github.com/repos/kyufox/manga/commits'), true);
+?>
+      <div class="row">
+
+        <div class="nav bar breadcrumbs">
+          Admin Panel &nbsp;/&nbsp; Version Info
+        </div><br>
+
+        <?php if ($new_version == true) { ?>
+          <div class="notice success" id="note">
+            <strong>New Version Available:</strong> Get <a href="<?php echo $github_latest['html_url']; ?>" target="_blank"><?php echo $github_latest['name']; ?></a>!
+          </div>
+        <?php } ?>
+
+        <div class="box col-12">
+          <p>
+            Current Version: <strong><?php echo $current_version; ?></strong><br>
+            Latest Version: <strong><?php echo $latest_version; ?></strong><br>
+            Latest Commit: <strong><a href="<?php echo $github_commit[0]['html_url']; ?>" target="_blank"><?php echo substr($github_commit[0]['sha'], 0, 10); ?></a></strong>
+              authored by <a href="<?php echo $github_commit[0]['author']['html_url']; ?>" target="_blank"><?php echo $github_commit[0]['author']['login']; ?></a>
+              &mdash; <?php echo $github_commit[0]['commit']['message']; ?>
+          </p>
+        </div>
+
+      </div>
+<?php
 /* GLOBAL SETTINGS */
-if ($page == 'settings'  && $action == ''){
+} elseif ($page == 'settings'  && $action == ''){
 ?>
 
       <div class="row">
