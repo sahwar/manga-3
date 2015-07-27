@@ -95,10 +95,10 @@ if ($page == ''){
           <li class="collapse"><a href="#" class="menu"><i class="fa fa-bars"></i></a></li>
           <li><a href="admin?p=chapter">Chapters</a></li>
           <li><a href="admin?p=settings">Global Settings</a></li>
-        </ul>
-        <ul class="right">
-          <li><a href="admin?p=version">Version</a></li>
-          <li><a href="https://github.com/kyufox/manga" target="_blank"><i class="fa fa-github-alt fa-fw"></i> GitHub</a></li>
+          <ul class="right">
+            <li><a href="admin?p=version">Version</a></li>
+            <li><a href="https://github.com/kyufox/manga" target="_blank"><i class="fa fa-github-alt fa-fw"></i> GitHub</a></li>
+          </ul>
         </ul>
       </div>
     </nav>
@@ -130,11 +130,13 @@ if ($page == 'version'){
 ?>
       <div class="row">
 
-        <div class="breadcrumbs box col-12">
-          <ol>
-            <li><a href="admin">Admin Panel</a></li>
-            <li class="active">Version Info</li>
-          </ol>
+        <div class="box col-12">
+          <div class="breadcrumbs">
+            <ol>
+              <li><a href="admin">Admin Panel</a></li>
+              <li class="active">Version Info</li>
+            </ol>
+          </div>
         </div>
 
         <?php if ($new_version == true) { ?>
@@ -161,11 +163,13 @@ if ($page == 'version'){
 
       <div class="row">
 
-        <div class="breadcrumbs box col-12">
-          <ol>
-            <li><a href="admin">Admin Panel</a></li>
-            <li class="active">Global Settings</li>
-          </ol>
+        <div class="box col-12">
+          <div class="breadcrumbs">
+            <ol>
+              <li><a href="admin">Admin Panel</a></li>
+              <li class="active">Global Settings</li>
+            </ol>
+          </div>
         </div>
 
         <?php if (isset($_GET['saved'])) { ?>
@@ -205,11 +209,13 @@ if ($page == 'version'){
 
       <div class="row">
 
-        <div class="breadcrumbs box col-12">
-          <ol>
-            <li><a href="admin">Admin Panel</a></li>
-            <li class="active">Chapters</li>
-          </ol>
+        <div class="box col-12">
+          <div class="breadcrumbs">
+            <ol>
+              <li><a href="admin">Admin Panel</a></li>
+              <li class="active">Chapters</li>
+            </ol>
+          </div>
         </div>
 
         <div class="box col-10">
@@ -265,34 +271,37 @@ if ($page == 'version'){
                      'time' => '');
       } ?>
 
-        <div class="breadcrumbs box col-12">
-          <ol>
-            <li><a href="admin">Admin Panel</a></li>
-            <li><a href="admin?p=chapter">Chapters</a></li>
-            <?php if ($action == 'edit') { ?>
-              <li><a href="admin?p=chapter&a=edit&id=<?php echo $id; ?>">Chapter <?php echo $id; ?></a></li>
-              <li class="active">Edit</li>
-            <?php } else { ?>
-              <li class="active">Add Chapter</li>
-            <?php } ?>
-          </ol>
-        </div>
-
-        <?php if (isset($_GET['saved'])) { ?>
-          <div class="alert success" id="note" style="margin-bottom: 16px;">
-            <div class="dismiss"><i class="fa fa-close"></i></div>
-            <strong>Chapter Saved</strong>
+      <div class="row">
+          <div class="box col-12">
+            <div class="breadcrumbs">
+              <ol>
+                <li><a href="admin">Admin Panel</a></li>
+                <li><a href="admin?p=chapter">Chapters</a></li>
+                <?php if ($action == 'edit') { ?>
+                  <li><a href="admin?p=chapter&a=edit&id=<?php echo $id; ?>">Chapter <?php echo $id; ?></a></li>
+                  <li class="active">Edit</li>
+                <?php } else { ?>
+                  <li class="active">Add Chapter</li>
+                <?php } ?>
+              </ol>
+            </div>
           </div>
-        <?php } ?>
 
-        <?php if (isset($_GET['added'])) { ?>
-          <div class="alert success" id="note" style="margin-bottom: 16px;">
-            <div class="dismiss"><i class="fa fa-close"></i></div>
-            <strong>New Chapter Added</strong>
-          </div>
-        <?php } ?>
+          <?php if (isset($_GET['saved'])) { ?>
+            <div class="alert success" id="note" style="margin-bottom: 16px;">
+              <div class="dismiss"><i class="fa fa-close"></i></div>
+              <strong>Chapter Saved</strong>
+            </div>
+          <?php } ?>
 
-        <div class="row">
+          <?php if (isset($_GET['added'])) { ?>
+            <div class="alert success" id="note" style="margin-bottom: 16px;">
+              <div class="dismiss"><i class="fa fa-close"></i></div>
+              <strong>New Chapter Added</strong>
+            </div>
+          <?php } ?>
+
+
           <div class="box col-10">
             <?php if ($action == 'add') { ?>
               <input type="text" id="id" name="id" pattern="[0-9]*" value="<?php echo (chapterTotal() + 1); ?>" placeholder="Chapter" required />
@@ -334,13 +343,15 @@ if ($page == 'version'){
         $array = unserialize(file_get_contents('data/' . $lang . '/ch/' . $id));
         ?>
 
-        <div class="breadcrumbs box col-12">
-          <ol>
-            <li><a href="admin">Admin Panel</a></li>
-            <li><a href="admin?p=chapter">Chapters</a></li>
-            <li><a href="admin?p=chapter&a=edit&id=<?php echo $id; ?>">Chapter <?php echo $id; ?></a></li>
-            <li class="active">Manage Images (<?php echo $array['imagekey']; ?></li>
-          </ol>
+        <div class="box col-12">
+          <div class="breadcrumbs">
+            <ol>
+              <li><a href="admin">Admin Panel</a></li>
+              <li><a href="admin?p=chapter">Chapters</a></li>
+              <li><a href="admin?p=chapter&a=edit&id=<?php echo $id; ?>">Chapter <?php echo $id; ?></a></li>
+              <li class="active">Manage Images (<?php echo $array['imagekey']; ?></li>
+            </ol>
+          </div>
         </div>
 
         <div class="box col-10">
@@ -396,13 +407,15 @@ if ($page == 'version'){
         $array = unserialize(file_get_contents('data/' . $lang . '/ch/' . $id));
         ?>
 
-        <div class="breadcrumbs box col-12">
-          <ol>
-            <li><a href="admin">Admin Panel</a></li>
-            <li><a href="admin?p=chapter">Chapters</a></li>
-            <li><a href="admin?p=chapter&a=edit&id=<?php echo $id; ?>">Chapter <?php echo $id; ?></a></li>
-            <li class="active">Add Images</li>
-          </ol>
+        <div class="box col-12">
+          <div class="breadcrumbs">
+            <ol>
+              <li><a href="admin">Admin Panel</a></li>
+              <li><a href="admin?p=chapter">Chapters</a></li>
+              <li><a href="admin?p=chapter&a=edit&id=<?php echo $id; ?>">Chapter <?php echo $id; ?></a></li>
+              <li class="active">Add Images</li>
+            </ol>
+          </div>
         </div>
 
         <div class="box col-10">
