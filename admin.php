@@ -419,9 +419,9 @@ if ($page == 'version'){
         </div>
 
         <div class="box col-10">
-          <script src="inc/dropzone.js"></script>
-          <link rel="stylesheet" href="inc/dropzone.css">
-          <form action="inc/imageupload.php?ik=<?php echo $array['imagekey']; ?>" class="dropzone"></form>
+          <script src="inc/dropzone.min.js"></script>
+          <link rel="stylesheet" href="inc/dropzone.min.css">
+          <form action="inc/imageupload.php?ik=<?php echo $array['imagekey']; ?>" class="dropzone" style="border: 2px dashed #525252;"></form>
         </div>
 
         <div class="box col-2">
