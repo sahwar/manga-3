@@ -77,7 +77,6 @@ if ($page == ''){
     <title>Admin Panel</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-    <link type="text/css" rel="stylesheet" href="skins/caramel/css/font-awesome.min.css" />
     <link type="text/css" rel="stylesheet" href="skins/caramel/css/caramel.min.css" />
     <style>
       input[type="text"],select.dropdown {
@@ -89,19 +88,19 @@ if ($page == ''){
     </style>
   </head>
 <body>
-
   <header class="header fixed">
     <nav class="nav bar">
+      <div class="container">
         <ul>
-            <li class="collapse"><a href="#" class="menu"><i class="fa fa-bars"></i></a></li>
-            <li><a href="admin?p=chapter">Chapters</a></li>
-            <li><a href="admin?p=settings">Global Settings</a></li>
+          <li class="collapse"><a href="#" class="menu"><i class="fa fa-bars"></i></a></li>
+          <li><a href="admin?p=chapter">Chapters</a></li>
+          <li><a href="admin?p=settings">Global Settings</a></li>
         </ul>
-
         <ul class="right">
-            <li><a href="admin?p=version">Version</a></li>
-            <li><a href="https://github.com/kyufox/manga" target="_blank"><i class="fa fa-github-alt fa-fw"></i></a></li>
+          <li><a href="admin?p=version">Version</a></li>
+          <li><a href="https://github.com/kyufox/manga" target="_blank"><i class="fa fa-github-alt fa-fw"></i> GitHub</a></li>
         </ul>
+      </div>
     </nav>
   </header>
   <br>
@@ -131,9 +130,12 @@ if ($page == 'version'){
 ?>
       <div class="row">
 
-        <div class="nav bar breadcrumbs">
-          Admin Panel &nbsp;/&nbsp; Version Info
-        </div><br>
+        <div class="breadcrumbs box col-12">
+          <ol>
+            <li><a href="admin">Admin Panel</a></li>
+            <li class="active">Version Info</li>
+          </ol>
+        </div>
 
         <?php if ($new_version == true) { ?>
           <div class="notice success" id="note">
@@ -159,9 +161,12 @@ if ($page == 'version'){
 
       <div class="row">
 
-        <div class="nav bar breadcrumbs">
-          Admin Panel &nbsp;/&nbsp; Global Settings
-        </div><br>
+        <div class="breadcrumbs box col-12">
+          <ol>
+            <li><a href="admin">Admin Panel</a></li>
+            <li class="active">Global Settings</li>
+          </ol>
+        </div>
 
         <?php if (isset($_GET['saved'])) { ?>
           <div class="alert success" id="note" style="margin-bottom: 16px;">
@@ -200,9 +205,12 @@ if ($page == 'version'){
 
       <div class="row">
 
-        <div class="nav bar breadcrumbs">
-          Admin Panel &nbsp;/&nbsp; Chapters
-        </div><br>
+        <div class="breadcrumbs box col-12">
+          <ol>
+            <li><a href="admin">Admin Panel</a></li>
+            <li class="active">Chapters</li>
+          </ol>
+        </div>
 
         <div class="box col-10">
         <?php if (chapterTotal() > 0) { ?>
@@ -257,9 +265,18 @@ if ($page == 'version'){
                      'time' => '');
       } ?>
 
-        <div class="nav bar breadcrumbs">
-          Admin Panel &nbsp;/&nbsp; Chapters &nbsp;/&nbsp; Chapter <?php echo $id; ?> &nbsp;/&nbsp; Edit
-        </div><br>
+        <div class="breadcrumbs box col-12">
+          <ol>
+            <li><a href="admin">Admin Panel</a></li>
+            <li><a href="admin?p=chapter">Chapters</a></li>
+            <?php if ($action == 'edit') { ?>
+              <li><a href="admin?p=chapter&a=edit&id=<?php echo $id; ?>">Chapter <?php echo $id; ?></a></li>
+              <li class="active">Edit</li>
+            <?php } else { ?>
+              <li class="active">Add Chapter</li>
+            <?php } ?>
+          </ol>
+        </div>
 
         <?php if (isset($_GET['saved'])) { ?>
           <div class="alert success" id="note" style="margin-bottom: 16px;">
@@ -317,9 +334,14 @@ if ($page == 'version'){
         $array = unserialize(file_get_contents('data/' . $lang . '/ch/' . $id));
         ?>
 
-        <div class="nav bar breadcrumbs">
-          Admin Panel &nbsp;/&nbsp; Chapters &nbsp;/&nbsp; Chapter <?php echo $id; ?> &nbsp;/&nbsp; Edit &nbsp;/&nbsp; Manage Images (<?php echo $array['imagekey']; ?>)
-        </div><br>
+        <div class="breadcrumbs box col-12">
+          <ol>
+            <li><a href="admin">Admin Panel</a></li>
+            <li><a href="admin?p=chapter">Chapters</a></li>
+            <li><a href="admin?p=chapter&a=edit&id=<?php echo $id; ?>">Chapter <?php echo $id; ?></a></li>
+            <li class="active">Manage Images (<?php echo $array['imagekey']; ?></li>
+          </ol>
+        </div>
 
         <div class="box col-10">
           <table class="table">
@@ -374,9 +396,14 @@ if ($page == 'version'){
         $array = unserialize(file_get_contents('data/' . $lang . '/ch/' . $id));
         ?>
 
-        <div class="nav bar breadcrumbs">
-          Admin Panel &nbsp;/&nbsp; Chapters &nbsp;/&nbsp; Chapter <?php echo $id; ?> &nbsp;/&nbsp; Edit &nbsp;/&nbsp; Add Images
-        </div><br>
+        <div class="breadcrumbs box col-12">
+          <ol>
+            <li><a href="admin">Admin Panel</a></li>
+            <li><a href="admin?p=chapter">Chapters</a></li>
+            <li><a href="admin?p=chapter&a=edit&id=<?php echo $id; ?>">Chapter <?php echo $id; ?></a></li>
+            <li class="active">Add Images</li>
+          </ol>
+        </div>
 
         <div class="box col-10">
           <script src="inc/dropzone.js"></script>
@@ -397,9 +424,14 @@ if ($page == 'version'){
 } elseif ($page == 'chapter' && $action == 'deleteimage' && $id != '' && !isset($_GET['file']) && isset($_GET['all']) && !isset($_GET['confirm'])){
 ?>
 
-        <div class="nav bar breadcrumbs">
-          Admin Panel &nbsp;/&nbsp; Chapters &nbsp;/&nbsp; Chapter <?php echo $id; ?> &nbsp;/&nbsp; Edit &nbsp;/&nbsp; Delete All Images
-        </div><br>
+        <div class="breadcrumbs">
+          <ol>
+            <li><a href="admin">Admin Panel</a></li>
+            <li><a href="admin?p=chapter">Chapters</a></li>
+            <li><a href="admin?p=chapter&a=edit&id=<?php echo $id; ?>">Chapter <?php echo $id; ?></a></li>
+            <li class="active">Delete All Images</li>
+          </ol>
+        </div>
 
         <div class="panel warn">
           <div class="panel-head">Are you sure you want to delete all images for this chapter?</div>
@@ -416,13 +448,18 @@ if ($page == 'version'){
         </a>
 
 <?php
-/* CHAPTER EDIT: DELETE ALL IMAGES CONFIRMATION */
+/* CHAPTER EDIT: DELETE CHAPTER CONFIRMATION */
 } elseif ($page == 'chapter' && $action == 'deleteall' && $id != '' && !isset($_GET['confirm'])){
 ?>
 
-        <div class="nav bar breadcrumbs">
-          Admin Panel &nbsp;/&nbsp; Chapters &nbsp;/&nbsp; Chapter <?php echo $id; ?> &nbsp;/&nbsp; Edit &nbsp;/&nbsp; Delete Chapter
-        </div><br>
+        <div class="breadcrumbs">
+          <ol>
+            <li><a href="admin">Admin Panel</a></li>
+            <li><a href="admin?p=chapter">Chapters</a></li>
+            <li><a href="admin?p=chapter&a=edit&id=<?php echo $id; ?>">Chapter <?php echo $id; ?></a></li>
+            <li class="active">Delete Chaper</li>
+          </ol>
+        </div>
 
         <div class="panel warn">
           <div class="panel-head">Are you sure you want to delete the entire chapter?</div>
