@@ -31,6 +31,7 @@ if ($page == ''){
   $array['pages'] = $_POST['pages'];
   $array['date'] = $_POST['date'];
   $array['time'] = $_POST['time'];
+  $array['doubleSpread'] = $_POST['doubleSpread'];
   file_put_contents('data/' . $lang . '/ch/' . $id,serialize($array));
   if ($action == 'edit') {
     header('Location: admin?p=chapter&a=edit&id=' . $id . '&saved');
@@ -288,19 +289,22 @@ if ($page == 'version'){
           </div>
 
           <?php if (isset($_GET['saved'])) { ?>
-            <div class="alert success" id="note" style="margin-bottom: 16px;">
-              <div class="dismiss"><i class="fa fa-close"></i></div>
-              <strong>Chapter Saved</strong>
+            <div class="box col-12">
+              <div class="alert success" id="note" style="margin-bottom: 16px;">
+                <div class="dismiss"><i class="fa fa-close"></i></div>
+                <strong>Chapter Saved</strong>
+              </div>
             </div>
           <?php } ?>
 
           <?php if (isset($_GET['added'])) { ?>
-            <div class="alert success" id="note" style="margin-bottom: 16px;">
-              <div class="dismiss"><i class="fa fa-close"></i></div>
-              <strong>New Chapter Added</strong>
+            <div class="box col-12">
+              <div class="alert success" id="note" style="margin-bottom: 16px;">
+                <div class="dismiss"><i class="fa fa-close"></i></div>
+                <strong>New Chapter Added</strong>
+              </div>
             </div>
           <?php } ?>
-
 
           <div class="box col-10">
             <?php if ($action == 'add') { ?>
@@ -310,6 +314,10 @@ if ($page == 'version'){
             <input type="text" id="pages" name="pages" pattern="[0-9]*" value="<?php echo $array['pages']; ?>" placeholder="Page Count" required />
             <input type="text" id="date" name="date" pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))" value="<?php echo $array['date']; ?>" placeholder="Release Date (YYYY-MM-DD)" />
             <input type="text" id="time" name="time" pattern="(0[0-9]|1[0-9]|2[0-3])(:[0-5][0-9]){2}" value="<?php echo $array['time']; ?>" placeholder="Release Time (HH:MM:SS)" />
+            <select id="doubleSpread" name="doubleSpread" class="dropdown">
+              <option value="1"<?php if ($array['doubleSpread'] == 1){ echo ' selected'; } ?>>Start at Page 1</option>
+              <option value="2"<?php if ($array['doubleSpread'] == 2){ echo ' selected'; } ?>>Start at Page 2</option>
+            </select>
           </div>
           <div class="box col-2">
             <a class="btn default clean" style="display: block;" href="admin?p=chapter">
