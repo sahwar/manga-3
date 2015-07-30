@@ -86,6 +86,9 @@ if ($page == ''){
        -webkit-box-sizing:border-box;
        -moz-box-sizing: border-box;
       }
+      form label {
+        font-weight: bold;
+      }
     </style>
   </head>
 <body>
@@ -183,7 +186,9 @@ if ($page == 'version'){
         <form method="post" action="admin?p=settings&go">
           <?php $array = unserialize(file_get_contents('data/settings')); ?>
           <div class="box col-10">
+            <label for="lang">Language</label>
             <input type="text" id="lang" name="lang" value="<?php echo $array['lang']; ?>" placeholder="Language" required />
+            <label for="timezone">Timezone</label>
             <select name="timezone" id="timezone" class="dropdown">
               <?php foreach(DateTimeZone::listIdentifiers(DateTimeZone::ALL) as $tzlist) {
                 if ($array['timezone'] == $tzlist) {
@@ -269,7 +274,8 @@ if ($page == 'version'){
       $array = array('title' => '',
                      'pages' => '',
                      'date' => '',
-                     'time' => '');
+                     'time' => '',
+                     'doubleSpread' => 1);
       } ?>
 
       <div class="row">
@@ -308,12 +314,18 @@ if ($page == 'version'){
 
           <div class="box col-10">
             <?php if ($action == 'add') { ?>
+              <label for="id">Chapter #*</label>
               <input type="text" id="id" name="id" pattern="[0-9]*" value="<?php echo (chapterTotal() + 1); ?>" placeholder="Chapter" required />
             <?php } ?>
+            <label for="title">Chapter Title*</label>
             <input type="text" id="title" name="title" value="<?php echo $array['title']; ?>" placeholder="Title" required />
+            <label for="pages"># of Pages*</label>
             <input type="text" id="pages" name="pages" pattern="[0-9]*" value="<?php echo $array['pages']; ?>" placeholder="Page Count" required />
+            <label for="date">Release Date (YYYY-MM-DD)</label>
             <input type="text" id="date" name="date" pattern="(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))" value="<?php echo $array['date']; ?>" placeholder="Release Date (YYYY-MM-DD)" />
+            <label for="time">Release Time (HH:MM:SS)</label>
             <input type="text" id="time" name="time" pattern="(0[0-9]|1[0-9]|2[0-3])(:[0-5][0-9]){2}" value="<?php echo $array['time']; ?>" placeholder="Release Time (HH:MM:SS)" />
+            <label for="doubleSpread">Double Spread Page Start</label>
             <select id="doubleSpread" name="doubleSpread" class="dropdown">
               <option value="1"<?php if ($array['doubleSpread'] == 1){ echo ' selected'; } ?>>Start at Page 1</option>
               <option value="2"<?php if ($array['doubleSpread'] == 2){ echo ' selected'; } ?>>Start at Page 2</option>
