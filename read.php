@@ -1,4 +1,9 @@
 <?php
+/*
+ *  MANGA PROJECT (http://manga-project.ga/)
+ *  Created by 花木カズキ (Kazuki Hanaki)
+ *  Released under the GNU GPLv2 license
+ */
 require_once('inc/functions.php');
 
 $skin = 'caramel';
