@@ -14,5 +14,5 @@ This is still under development and not finished.
 Created by 花木カズキ (Kazuki Hanaki)  
 Code released under GNU GENERAL PUBLIC LICENSE - Version 2, June 1991
 
-榊原夏子(ロゴのキャラ) © 花木カズキ ／ 吸血フォックス ／ THE LAST Magical Girl PROJECT  
-Natsuko Sakakibara (Character in Logo) © Kazuki Hanaki ／ KYUKETSU FOX ／ THE LAST Magical Girl PROJECT
+榊原夏子(ロゴのキャラ) © 花木カズキ ／ THE LAST Magical Girl PROJECT  
+Natsuko Sakakibara (Character in Logo) © Kazuki Hanaki ／ THE LAST Magical Girl PROJECT
